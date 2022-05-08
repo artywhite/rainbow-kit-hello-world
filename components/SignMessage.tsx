@@ -2,7 +2,7 @@ import React from 'react'
 import { useSignMessage } from 'wagmi'
 import { verifyMessage } from 'ethers/lib/utils'
 
-export function SignMessage() {
+function SignForm() {
   const recoveredAddress = React.useRef<string>()
   const [message, setMessage] = React.useState<string>('')
   const [signedMessage, setSignedMessage] = React.useState<string>('')
@@ -25,7 +25,6 @@ export function SignMessage() {
     recoveredAddress: recoveredAddress.current,
     signature,
   }
-
   return (
     <form
       onSubmit={(event) => {
@@ -42,6 +41,7 @@ export function SignMessage() {
           name="message"
           placeholder="Type your message"
           onChange={(event) => setMessage(event.target.value)}
+          autoFocus
         />
       </div>
       <div>
@@ -58,5 +58,22 @@ export function SignMessage() {
 
       {error && <div>{error.message}</div>}
     </form>
+  )
+}
+
+export function SignMessage() {
+  const [showSignMessage, setShowSignMessage] = React.useState<boolean>(false)
+
+  return (
+    <div>
+      {showSignMessage ? (
+        <div>
+          <SignForm />
+          <button onClick={() => setShowSignMessage(false)}>Hide</button>
+        </div>
+      ) : (
+        <button onClick={() => setShowSignMessage(true)}>Sign message?</button>
+      )}
+    </div>
   )
 }
